@@ -102,7 +102,7 @@ services:
     ports:
       - "8081:8080"
     depends_on:
-      - mysql
+      - database
     networks:
       symfony:
         aliases:
