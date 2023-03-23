@@ -78,7 +78,7 @@ function ProjectList() {
                             </tr>
                             </thead>
                             <tbody>
-                            {projectList.length === 0 ? <td colSpan="5" className="text-center py-2">No one has created an article yet.</td> : projectList.map((project, key)=>{
+                            {projectList.length === 0 ? <tr><td colSpan="5" className="text-center py-2">No one has created an article yet.</td></tr> : projectList.map((project, key)=>{
                                 return (
                                     <tr key={key}>
                                         <td>{project.name}</td>
