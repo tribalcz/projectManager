@@ -57,7 +57,7 @@ function ProjectList() {
     return (
         <Layout>
             <div className="container">
-                <h2 className="text-center mt-5 mb-3">Symfony Project Manager</h2>
+                <h2 className="text-center mt-5 mb-3">Project Manager</h2>
                 <div className="card">
                     <div className="card-header">
                         <Link
@@ -83,8 +83,8 @@ function ProjectList() {
                                     <tr key={key}>
                                         <td>{project.name}</td>
                                         <td>{project.description}</td>
-                                        <td>{moment(project.created_at).format('DD.MM.YYYY - H:i:s')}</td>
-                                        <td>{moment(project.updated_at).format('DD.MM.YYYY - H:i:s')}</td>
+                                        <td>{moment(project.created_at).format('DD.MM.YYYY - HH:MM:ss')}</td>
+                                        <td>{moment(project.updated_at).format('DD.MM.YYYY - HH:MM:ss')}</td>
                                         <td>
                                             <Link
                                                 to={`/show/${project.id}`}
