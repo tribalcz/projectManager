@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import Layout from "../components/Layout"
 import Swal from 'sweetalert2'
 import axios from 'axios';
 
 function ProjectEdit() {
     const [id, setId] = useState(parseInt(useParams().id))
+    const [isVisible, setIsVisible] = useState()
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [isSaving, setIsSaving] = useState(false)
+    const navigate = useNavigate()
 
     useEffect(() => {
         axios.get(`/api/project/${id}`)
@@ -16,6 +18,7 @@ function ProjectEdit() {
                 let project = response.data
                 setName(project.name)
                 setDescription(project.description)
+                setIsVisible(project.isVisible)
             })
             .catch(function (error) {
                 Swal.fire({
@@ -24,14 +27,20 @@ function ProjectEdit() {
                     showConfirmButton: false,
                     timer: 1500
                 })
+                navigate("/")
             })
     }, [])
+
+    const toggleVisibility = () => {
+      setIsVisible(!isVisible)
+    }
 
     const handleSave = () => {
         setIsSaving(true);
         axios.patch(`/api/project/${id}`, {
             name: name,
-            description: description
+            description: description,
+            isVisible: !isVisible
         })
             .then(function (response) {
                 Swal.fire({
@@ -41,6 +50,7 @@ function ProjectEdit() {
                     timer: 1500
                 })
                 setIsSaving(false)
+                navigate(`/show/${id}`)
             })
             .catch(function (error) {
                 Swal.fire({
