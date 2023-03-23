@@ -67,7 +67,7 @@ function ProjectList() {
                     </div>
                     <div className="card-body">
 
-                        <table className="table table-bordered">
+                        <table className="table table-striped table-bordered table-responsive-md">
                             <thead>
                             <tr>
                                 <th>Name</th>
@@ -78,7 +78,7 @@ function ProjectList() {
                             </tr>
                             </thead>
                             <tbody>
-                            {projectList.map((project, key)=>{
+                            {projectList.length === 0 ? <td colSpan="5" className="text-center py-2">No one has created an article yet.</td> : projectList.map((project, key)=>{
                                 return (
                                     <tr key={key}>
                                         <td>{project.name}</td>
