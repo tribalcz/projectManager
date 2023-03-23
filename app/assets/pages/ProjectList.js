@@ -82,7 +82,7 @@ function ProjectList() {
                                 return (
                                     <tr key={key}>
                                         <td>{project.name}</td>
-                                        <td>{project.description}</td>
+                                        <td>{project.description.length > 100 ? project.description.substring(0,100) + ' >>>' : project.description}</td>
                                         <td>{moment(project.created_at).format('DD.MM.YYYY - HH:MM:ss')}</td>
                                         <td>{moment(project.updated_at).format('DD.MM.YYYY - HH:MM:ss')}</td>
                                         <td>
