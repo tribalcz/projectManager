@@ -77,12 +77,14 @@ class ProjectController extends AbstractController
         $content = json_decode($request->getContent());
         $project->setName($content->name);
         $project->setDescription($content->description);
+        $project->setIsVisible($content->isVisible);
         $em->flush();
 
         $data = [
             'id' => $project->getId(),
             'name' => $project->getName(),
             'description' => $project->getDescription(),
+            'isVisible' => $project->getIsVisible(),
         ];
 
         return $this->json($data);

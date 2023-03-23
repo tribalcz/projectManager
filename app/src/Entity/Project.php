@@ -23,6 +23,9 @@ class Project
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $isVisible = 1;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -48,6 +51,18 @@ class Project
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getIsVisible(): ?int
+    {
+        return $this->isVisible;
+    }
+
+    public function setIsVisible(int $isVisible): self
+    {
+        $this->isVisible = $isVisible;
 
         return $this;
     }
