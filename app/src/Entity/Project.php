@@ -4,13 +4,15 @@ namespace App\Entity;
 
 use App\Repository\ProjectRepository;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping as ORM;use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: false)]
 class Project
 {
-    use TimestampableEntity;
+    use TimestampableEntity, SoftDeleteableEntity;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
