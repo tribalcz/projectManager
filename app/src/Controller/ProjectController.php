@@ -17,7 +17,7 @@ class ProjectController extends AbstractController
     {
         $projects = $em
             ->getRepository(Project::class)
-            ->findAll();
+            ->findBy(['deletedAt' => null]);
 
         $data = [];
 
@@ -50,7 +50,7 @@ class ProjectController extends AbstractController
     #[Route('/project/{id}', name:'project_show', methods: ['GET'])]
     public function show(EntityManagerInterface $em, int $id): Response
     {
-        $project = $em->getRepository(Project::class)->find($id);
+        $project = $em->getRepository(Project::class)->findOneBy(['id' => $id, 'deletedAt' => null]);
 
         if (!$project) {
             return $this->json('No project found for id ' . $id, 404);
@@ -68,7 +68,7 @@ class ProjectController extends AbstractController
     #[Route('/project/{id}', name: 'project_edit', methods: ['PUT', 'PATCH'])]
     public function edit(EntityManagerInterface $em, Request $request, int $id): Response
     {
-        $project = $em->getRepository(Project::class)->find($id);
+        $project = $em->getRepository(Project::class)->findOneBy(['id' => $id, 'deletedAt' => null]);
 
         if (!$project) {
             return $this->json('No project found for id ' . $id, 404);
