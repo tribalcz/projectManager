@@ -13,11 +13,22 @@ use App\Entity\Project;
 class ProjectController extends AbstractController
 {
     #[Route('/project', name: 'app_project', methods: ['GET'])]
-    public function index(EntityManagerInterface $em): Response
+    public function index(EntityManagerInterface $em, Request $request): Response
     {
-        $projects = $em
-            ->getRepository(Project::class)
-            ->findBy(['deletedAt' => null]);
+        $showDeleted = $request->query->getBoolean('showDeleted');
+
+        if ($showDeleted) {
+            $projects = $em
+                ->getRepository(Project::class)
+                ->createQueryBuilder('p')
+                ->where('p.deletedAt IS NOT NULL')
+                ->getQuery()
+                ->getResult();
+        } else {
+            $projects = $em
+                ->getRepository(Project::class)
+                ->findBy(['deletedAt' => null]);
+        }
 
         $data = [];
 
