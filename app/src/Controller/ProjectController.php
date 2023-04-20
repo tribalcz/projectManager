@@ -115,4 +115,24 @@ class ProjectController extends AbstractController
 
         return $this->json('Deleted a project successfully with id ' . $id);
     }
+
+    #[Route('/project/recover/{id}', name: 'project_recovery', methods: ['PATCH'])]
+    public function recovery(EntityManagerInterface $em, Request $request, int $id): Response
+    {
+        $project = $em->getRepository(Project::class)
+            ->createQueryBuilder('p')
+            ->where('p.id = :id')
+            ->andwhere('p.deletedAt IS NOT NULL')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if(!$project)
+            return $this->json('No project found for id ' . $id, 404);
+
+        $project->setDeletedAt(null);
+        $em->flush();
+
+        return $this->json('Project with id ' . $project->getId() .' has been successfully archived');
+    }
 }
