@@ -36,6 +36,16 @@ function ProjectEdit() {
     }
 
     const handleSave = () => {
+        //Validace polí name a description
+        if (!name || !description) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Please fill in all fields!',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            return;
+        }
         setIsSaving(true);
         axios.patch(`/api/project/${id}`, {
             name: name,

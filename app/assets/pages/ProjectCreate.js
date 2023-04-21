@@ -11,6 +11,16 @@ function ProjectCreate() {
     const navigate = useNavigate();
 
     const handleSave = () => {
+        //Validace polí name a description
+        if (!name || !description) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Please fill in all fields!',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            return;
+        }
         setIsSaving(true);
         let formData = new FormData()
         formData.append("name", name)
