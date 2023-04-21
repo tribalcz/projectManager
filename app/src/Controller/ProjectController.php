@@ -48,9 +48,16 @@ class ProjectController extends AbstractController
     #[Route('/project', name: 'project_new', methods: ['POST'])]
     public function new(EntityManagerInterface $em, Request $request): Response
     {
+        $name = $request->request->get('name');
+        $description = $request->request->get('description');
+
+        if (!$name || !$description) {
+            return $this->json('Name and description are required', 400);
+        }
+
         $project = new Project();
-        $project->setName($request->request->get('name'));
-        $project->setDescription($request->request->get('description'));
+        $project->setName($name);
+        $project->setDescription($description);
 
         $em->persist($project);
         $em->Flush();
@@ -79,13 +86,20 @@ class ProjectController extends AbstractController
     #[Route('/project/{id}', name: 'project_edit', methods: ['PUT', 'PATCH'])]
     public function edit(EntityManagerInterface $em, Request $request, int $id): Response
     {
+        $content = json_decode($request->getContent());
+
+        $name = $content->name;
+        $description = $content->description;
+
+        if (!$name || !$description) {
+            return $this->json('Name and description are required', 400);
+        }
+
         $project = $em->getRepository(Project::class)->findOneBy(['id' => $id, 'deletedAt' => null]);
 
         if (!$project) {
             return $this->json('No project found for id ' . $id, 404);
         }
-
-        $content = json_decode($request->getContent());
         $project->setName($content->name);
         $project->setDescription($content->description);
         $project->setIsVisible($content->isVisible);
@@ -122,7 +136,7 @@ class ProjectController extends AbstractController
         $project = $em->getRepository(Project::class)
             ->createQueryBuilder('p')
             ->where('p.id = :id')
-            ->andwhere('p.deletedAt IS NOT NULL')
+            ->andWhere('p.deletedAt IS NOT NULL')
             ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult();
