@@ -4,6 +4,15 @@ import Layout from "../components/Layout"
 import Swal from 'sweetalert2'
 import axios from 'axios';
 import moment from 'moment';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faBoxArchive,
+    faEdit,
+    faEye,
+    faRotateLeft,
+    faPlus,
+} from "@fortawesome/free-solid-svg-icons";
+import '../css/loader.css';
 
 function ProjectList() {
     const  [projectList, setProjectList] = useState([])
@@ -81,7 +90,7 @@ function ProjectList() {
                     .then(function (response) {
                         Swal.fire({
                             icon: 'success',
-                            title: 'Project deleted successfully!',
+                            title: 'The project was successfully archived!',
                             showConfirmButton: false,
                             timer: 1500
                         })
@@ -106,16 +115,16 @@ function ProjectList() {
                 <div className="card">
                     <div className="card-header">
                         <Link
-                            className="btn btn-outline-primary mx-1"
-                            to="/create">Create New Project
+                            className="btn btn-outline-primary rounded-0 mx-1"
+                            to="/create"> <FontAwesomeIcon icon={faPlus} /> Create New Project
                         </Link>
 
                         <button
                             onClick={toggleShowDeleted}
-                            className="btn btn-outline-danger mx-1"
+                            className="btn btn-outline-danger rounded-0 mx-1"
                             disabled={isLoading}>
 
-                            {isLoading ? 'Loading...' : (showDeleted ? 'All Projects' : 'Archived Projects')}
+                            {isLoading ? <div className="running-dots"></div> : (showDeleted ? 'All Projects' : 'Archived Projects')}
                         </button>
                     </div>
                     <div className="card-body">
@@ -132,7 +141,7 @@ function ProjectList() {
                             </tr>
                             </thead>
                             <tbody>
-                            {projectList.length === 0 ? <tr><td colSpan="5" className="text-center py-2">No one has created an article yet.</td></tr> : projectList.map((project, key)=>{
+                            {projectList.length === 0 ? <tr><td colSpan="6" className="text-center py-2">No one has created an article yet.</td></tr> : projectList.map((project, key)=>{
                                 return (
                                     <tr key={key}>
                                         <td>{project.id}</td>
@@ -143,8 +152,8 @@ function ProjectList() {
                                         <td>
                                             <Link
                                                 to={`/show/${project.id}`}
-                                                className="btn btn-outline-info mx-1">
-                                                Show
+                                                className="btn btn-outline-info  rounded-0">
+                                                <FontAwesomeIcon icon={faEye} />
                                             </Link>
                                             <Link
                                                 className="btn btn-outline-success mx-1"
@@ -153,8 +162,8 @@ function ProjectList() {
                                             </Link>
                                             <button
                                                 onClick={ () => showDeleted ? handleRecovery(project.id) : handleDelete(project.id)}
-                                                className="btn btn-outline-danger mx-1">
-                                                {isLoading ? (showDeleted ? 'Recover' : 'Archive' ) : (showDeleted ? 'Archive' : 'Recover')}
+                                                className="btn btn-outline-danger rounded-0 mx-1">
+                                                {isLoading ? <div className="mini-running-dots"></div> : (showDeleted ? <FontAwesomeIcon icon={faRotateLeft} /> : <FontAwesomeIcon icon={faBoxArchive} />)}
                                             </button>
                                         </td>
                                     </tr>
