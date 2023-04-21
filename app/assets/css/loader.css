@@ -1,0 +1,30 @@
+.running-dots {
+    width:12px;
+    height:12px;
+    background: #766DF4;
+    border-radius: 50%;
+    box-shadow: 20px 0 #766DF422,-20px 0 #766DF4;
+    animation:loader-anim 1s infinite linear alternate;
+}
+
+.mini-running-dots {
+    width:6px;
+    height:6px;
+    background: #766DF4;
+    border-radius: 50%;
+    box-shadow: 10px 0 #766DF422,-10px 0 #766DF4;
+    animation:mini-loader-anim 1s infinite linear alternate;
+}
+
+@keyframes mini-loader-anim {
+    0% {box-shadow: 10px 0 #766DF4,-10px 0 #766DF422;background: #766DF4}
+    33%{box-shadow: 10px 0 #766DF4,-10px 0 #766DF422;background: #766DF422}
+    66%{box-shadow: 10px 0 #766DF422,-10px 0 #766DF4;background: #766DF422}
+}
+
+@keyframes loader-anim {
+    0% {box-shadow: 20px 0 #766DF4,-20px 0 #766DF422;background: #766DF4}
+    33%{box-shadow: 20px 0 #766DF4,-20px 0 #766DF422;background: #766DF422}
+    66%{box-shadow: 20px 0 #766DF422,-20px 0 #766DF4;background: #766DF422}
+}
+
