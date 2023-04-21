@@ -155,11 +155,13 @@ function ProjectList() {
                                                 className="btn btn-outline-info  rounded-0">
                                                 <FontAwesomeIcon icon={faEye} />
                                             </Link>
-                                            <Link
-                                                className="btn btn-outline-success mx-1"
-                                                to={`/edit/${project.id}`}>
-                                                Edit
-                                            </Link>
+                                            {!showDeleted && (
+                                                <Link
+                                                    className="btn btn-outline-success rounded-0"
+                                                    to={`/edit/${project.id}`}>
+                                                    <FontAwesomeIcon icon={faEdit} />
+                                                </Link>
+                                            )}
                                             <button
                                                 onClick={ () => showDeleted ? handleRecovery(project.id) : handleDelete(project.id)}
                                                 className="btn btn-outline-danger rounded-0 mx-1">
