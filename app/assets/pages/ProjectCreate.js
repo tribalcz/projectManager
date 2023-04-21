@@ -55,7 +55,7 @@ function ProjectCreate() {
                 <h2 className="text-center mt-5 mb-3">Create New Project</h2>
                 <div className="card">
                     <div className="card-header">
-                        <Link className="btn btn-outline-info float-right" to="/" >
+                        <Link className="btn btn-outline-info float-right rounded-0" to="/" >
                             View All Projects
                         </Link>
                     </div>
@@ -73,7 +73,12 @@ function ProjectCreate() {
                                 </textarea>
                             </div>
                             <button
-                                disabled={isSaving} onClick={handleSave} type="button" className="btn btn-outline-primary mt-3">Save Project</button>
+                                disabled={isSaving}
+                                onClick={handleSave}
+                                type="button"
+                                className="btn btn-outline-primary rounded-0 mt-3">
+                                Save Project
+                            </button>
                         </form>
                     </div>
                 </div>

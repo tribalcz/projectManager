@@ -63,15 +63,15 @@ function ProjectShow() {
                 <div className="card">
                     <div className="card-header d-flex justify-content-between">
                         <Link
-                            className="btn btn-outline-info me-auto mx-1"
+                            className="btn btn-outline-info me-auto rounded-0 mx-1"
                             to="/"> View All Projects
                         </Link>
                         <Link
-                            className="btn btn-outline-success mx-1"
+                            className="btn btn-outline-success rounded-0 mx-1"
                             to={`/edit/${project.id}`}> Edit
                         </Link>
                         <button
-                            className="btn btn-outline-danger mx-1"
+                            className="btn btn-outline-danger rounded-0"
                             onClick={()=>handleDelete()}> Delete
                         </button>
                     </div>

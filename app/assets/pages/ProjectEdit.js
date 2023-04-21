@@ -80,7 +80,7 @@ function ProjectEdit() {
                 <div className="card">
                     <div className="card-header">
                         <Link
-                            className="btn btn-outline-info float-right"
+                            className="btn btn-outline-info float-right rounded-0"
                             to="/">View All Projects
                         </Link>
                     </div>
@@ -110,7 +110,7 @@ function ProjectEdit() {
                                 disabled={isSaving}
                                 onClick={handleSave}
                                 type="button"
-                                className="btn btn-outline-success mt-3">
+                                className="btn btn-outline-success rounded-0 mt-3">
                                 Update Project
                             </button>
                         </form>
