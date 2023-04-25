@@ -45,6 +45,30 @@ class ProjectController extends AbstractController
         return $this->json($data);
     }
 
+    #[Route('/project/find', name: 'project_find', methods: ['GET'])]
+    public function find(EntityManagerInterface $em, Request $request): Response
+    {
+        $find = $request->query->get('searchQuery');
+
+        if ($find) {
+            $projects = $em->getRepository(Project::class)->findByQuery($find);
+        }
+
+        $data = [];
+        foreach ($projects as $project) {
+            $data[] = [
+                'id' => $project->getId(),
+                'name' => $project->getName(),
+                'description' => $project->getDescription(),
+                'created_at' => $project->getCreatedAt(),
+                'updated_at' => $project->getUpdatedAt(),
+                'deleted_at' => $project->getDeletedAt(),
+            ];
+        }
+
+        return $this->json($data);
+    }
+
     #[Route('/project', name: 'project_new', methods: ['POST'])]
     public function new(EntityManagerInterface $em, Request $request): Response
     {
