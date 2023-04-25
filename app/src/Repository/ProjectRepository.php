@@ -39,6 +39,18 @@ class ProjectRepository extends ServiceEntityRepository
         }
     }
 
+    /*
+     * @return Project[] Returns an array of Project objects
+     */
+    public function findByQuery($query) {
+        $qb = $this->createQueryBuilder('p');
+
+        $qb->where('p.name LIKE :query')
+            ->setParameter('query', '%' . $query . '%');
+
+        return $qb->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return Project[] Returns an array of Project objects
 //     */
