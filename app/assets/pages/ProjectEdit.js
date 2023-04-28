@@ -12,6 +12,7 @@ function ProjectEdit() {
     const [isSaving, setIsSaving] = useState(false)
     const navigate = useNavigate()
 
+    //ziskani projektu pro účel editace
     useEffect(() => {
         axios.get(`/api/project/${id}`)
             .then(function (response) {
@@ -35,6 +36,7 @@ function ProjectEdit() {
       setIsVisible(!isVisible)
     }
 
+    //ulozeni projektu
     const handleSave = () => {
         //Validace polí name a description
         if (!name || !description) {

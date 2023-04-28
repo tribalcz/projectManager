@@ -10,6 +10,7 @@ function ProjectCreate() {
     const [isSaving, setIsSaving] = useState(false);
     const navigate = useNavigate();
 
+    //ulozeni projektu
     const handleSave = () => {
         //Validace polí name a description
         if (!name || !description) {

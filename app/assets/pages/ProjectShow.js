@@ -13,6 +13,7 @@ function ProjectShow() {
         fetchProjectListDetail()
     }, [])
 
+    //ziskani detailu projektu
     const fetchProjectListDetail = () => {
         axios.get(`/api/project/${id}`)
             .then(function (response) {
@@ -23,6 +24,7 @@ function ProjectShow() {
             })
     }
 
+    //softDelete projektu
     const handleDelete = () => {
         Swal.fire({
             title: 'Are you sure?',

@@ -21,7 +21,7 @@ class ProjectFixtures extends Fixture
             $project->setCreatedAt($created_at);
             $updated_at = $generator->dateTimeBetween($created_at, 'now');
             $project->setUpdatedAt($updated_at);
-            $deleted_at = $generator->optional(0.2, null)->dateTimeBetween($created_at, 'now');
+            $deleted_at = $generator->optional(0.2, null)->dateTimeBetween($created_at, 'now'); // 20% šance na vytvoření soft delete projektu
             if ($deleted_at !== null) {
                 $project->setDeletedAt($deleted_at);
             }
