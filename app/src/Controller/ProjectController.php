@@ -39,6 +39,7 @@ class ProjectController extends AbstractController
                 'description' => $project->getDescription(),
                 'created_at' => $project->getCreatedAt(),
                 'updated_at' => $project->getUpdatedAt(),
+                'deleted_at' => $project->getDeletedAt(),
             ];
         }
 
