@@ -11,17 +11,22 @@ import {
     faEye,
     faRotateLeft,
     faPlus,
+    faCaretDown,
+    faCaretUp,
 } from "@fortawesome/free-solid-svg-icons";
+import SearchInput from "../components/forms/SearchInput";
 import '../css/loader.css';
 
 function ProjectList() {
-    const  [projectList, setProjectList] = useState([])
-    const  [showDeleted, setShowDeleted] = useState(false)
-    const  [isLoading, setIsLoading] = useState(false)
+    const  [projectList, setProjectList] = useState([]) //state pro uložení projektů
+    const  [showDeleted, setShowDeleted] = useState(false) //state pro zobrazení smazaných projektů
+    const  [isLoading, setIsLoading] = useState(false) //state pro zobrazení loaderu
+    const  [searchQuery, setSearchQuery] = useState('') //state pro vyhledávání
 
     useEffect(() => {
         fetchProjectList()
     }, [showDeleted])
+
 
     const fetchProjectList = () => {
         setIsLoading(true)
@@ -40,10 +45,31 @@ function ProjectList() {
             })
     }
 
+    const handleSearch = (value) => {
+        setSearchQuery(value);
+        setProjectList([]);
+        setIsLoading(true);
+        axios.get('/api/project/find', {
+            params: {
+                searchQuery: value,
+            }
+        })
+            .then(function (response) {
+                setProjectList(response.data);
+                setIsLoading(false);
+            })
+            .catch(function (error) {
+                console.log(error);
+                setIsLoading(false);
+            })
+    }
+
+    //Zobrazení smazaných projektů
     const toggleShowDeleted = () => {
         setShowDeleted(!showDeleted)
     }
 
+    //Obnovení projektu
     const handleRecovery = (id) => {
         Swal.fire({
             title: 'Are you sure?',
@@ -76,6 +102,7 @@ function ProjectList() {
         })
     }
 
+    //softDelete projektu
     const handleDelete = (id) => {
         Swal.fire({
             title: 'Are you sure?',
@@ -112,6 +139,9 @@ function ProjectList() {
         <Layout>
             <div className="container">
                 <h2 className="text-center mt-5 mb-3">Project Manager</h2>
+                <div className="col-sm-8 mx-auto">
+                    <SearchInput onSearch={handleSearch} />
+                </div>
                 <div className="card">
                     <div className="card-header">
                         <Link
@@ -152,20 +182,20 @@ function ProjectList() {
                                         <td>
                                             <Link
                                                 to={`/show/${project.id}`}
-                                                className="btn btn-outline-info  rounded-0">
+                                                className="btn btn-outline-info rounded-0 mx-1">
                                                 <FontAwesomeIcon icon={faEye} />
                                             </Link>
-                                            {!showDeleted && (
+                                            {!showDeleted && !project.deleted_at && (
                                                 <Link
-                                                    className="btn btn-outline-success rounded-0"
+                                                    className="btn btn-outline-success rounded-0 mx-1"
                                                     to={`/edit/${project.id}`}>
                                                     <FontAwesomeIcon icon={faEdit} />
                                                 </Link>
                                             )}
                                             <button
-                                                onClick={ () => showDeleted ? handleRecovery(project.id) : handleDelete(project.id)}
+                                                onClick={ () => showDeleted || project.deleted_at ? handleRecovery(project.id) : handleDelete(project.id)}
                                                 className="btn btn-outline-danger rounded-0 mx-1">
-                                                {isLoading ? <div className="mini-running-dots"></div> : (showDeleted ? <FontAwesomeIcon icon={faRotateLeft} /> : <FontAwesomeIcon icon={faBoxArchive} />)}
+                                                {isLoading ? <div className="mini-running-dots"></div> : (showDeleted || project.deleted_at ? <FontAwesomeIcon icon={faRotateLeft} /> : <FontAwesomeIcon icon={faBoxArchive} />)}
                                             </button>
                                         </td>
                                     </tr>
