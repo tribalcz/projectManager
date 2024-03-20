@@ -29,7 +29,7 @@ function ProjectList() {
             fetchProjectList()
 
         const interval = setInterval(() => {
-            fetchProjectList();
+            updateProjectList();
         }, 300000);
 
         return () => clearInterval(interval);
@@ -52,6 +52,27 @@ function ProjectList() {
                 console.log(error);
                 setIsLoading(false)
             })
+    }
+
+    const updateProjectList = () => {
+        if (!initialLoad) {
+            setIsLoading(true);
+            axios.get('/api/project/updated-records')
+            .then(function (response) {
+                const updatedProjects = response.data;
+                setProjectList(prevProjectList => {
+                    return prevProjectList.map(project => {
+                        const updatedProject = updatedProjects.find(updatedProj => updatedProj.id === project.id);
+                        return updatedProject ? updatedProject : project;
+                    });
+                });
+                setIsLoading(false);
+            })
+            .catch(function (error) {
+                console.log(error);
+                setIsLoading(false);
+            });
+        }
     }
 
     const handleSearch = (value) => {
@@ -166,7 +187,7 @@ function ProjectList() {
                             {isLoading ? <div className="running-dots"></div> : (showDeleted ? 'All Projects' : 'Archived Projects')}
                         </button>
                         <button
-                            onClick={fetchProjectList}
+                            onClick={updateProjectList}
                             className="btn btn-outline-danger rounded-0 mx-1"
                             disabled={isLoading}>
                             {initialLoad ? <div className="running-dots"></div> : (isLoading ? <FontAwesomeIcon icon={faArrowsRotate} className={"fa-spin"} /> : <FontAwesomeIcon icon={faArrowsRotate} />)}
