@@ -12,6 +12,36 @@ use App\Entity\Project;
 #[Route('/api', name: 'api_')]
 class ProjectController extends AbstractController
 {
+    #[Route('/project/updated-records', name: 'project_updated_records', methods: ['GET'])]
+    public function updated_records(EntityManagerInterface $em, Request $request): Response
+    {
+        $lastUpdated = new \DateTime();
+        $lastUpdated->modify("-24 hours");
+
+        $projects = $em
+            ->getRepository(Project::class)
+            ->createQueryBuilder('p')
+            ->where('p.updatedAt > :lastUpdated')
+            ->setParameter('lastUpdated', $lastUpdated)
+            ->getQuery()
+            ->getResult();
+
+        $data = [];
+
+        foreach ($projects as $project) {
+            $data[] = [
+                'id' => $project->getId(),
+                'name' => $project->getName(),
+                'description' => $project->getDescription(),
+                'created_at' => $project->getCreatedAt(),
+                'updated_at' => $project->getUpdatedAt(),
+                'deleted_at' => $project->getDeletedAt(),
+            ];
+        }
+
+        return $this->json($data);
+    }
+
     #[Route('/project', name: 'app_project', methods: ['GET'])]
     public function index(EntityManagerInterface $em, Request $request): Response
     {
