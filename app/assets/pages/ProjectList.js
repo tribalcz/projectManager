@@ -4,6 +4,7 @@ import Layout from "../components/Layout"
 import Swal from 'sweetalert2'
 import axios from 'axios';
 import moment from 'moment';
+import Pagination from 'react-bootstrap/Pagination';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faBoxArchive,
@@ -24,6 +25,8 @@ function ProjectList() {
     const  [isLoading, setIsLoading] = useState(false) //state pro zobrazení loaderu
     const  [searchQuery, setSearchQuery] = useState('') //state pro vyhledávání
     const  [initialLoad, setInitialLoad] = useState(true)
+    const  [currentPage, setCurrentPage] = useState(1);
+    const  [totalPages, setTotalPages] = useState(0)
 
     useEffect(() => {
             fetchProjectList()
@@ -36,15 +39,19 @@ function ProjectList() {
     }, [showDeleted])
 
 
-    const fetchProjectList = () => {
+    const fetchProjectList = (page = 1) => {
         setIsLoading(true)
         axios.get('/api/project', {
             params: {
-                showDeleted: showDeleted
+                showDeleted: showDeleted,
+                page: page
             }
         })
             .then(function (response) {
-                setProjectList(response.data);
+                const { data, totalPage } = response.data;
+                setProjectList(data);
+                setCurrentPage(page);
+                setTotalPages(totalPage)
                 setIsLoading(false)
                 setInitialLoad(false)
             })
@@ -165,6 +172,20 @@ function ProjectList() {
         })
     }
 
+    const renderPageNumbers = () => {
+        const range = 3; // Počet stránek před a po aktuální stránce
+
+        let pageNumbers = [];
+        for (let i = Math.max(1, currentPage - range); i <= Math.min(totalPages, currentPage + range); i++) {
+            pageNumbers.push(
+                <Pagination.Item key={i} active={i === currentPage} onClick={() => fetchProjectList(i)}>
+                    {i}
+                </Pagination.Item>
+                );
+        }
+        return pageNumbers; // Return pole stránek
+    }
+
     return (
         <Layout>
             <div className="container">
@@ -240,6 +261,17 @@ function ProjectList() {
                             })}
                             </tbody>
                         </table>
+                    </div>
+                    <div className="d-flex justify-content-center">
+                        <Pagination>
+                            <Pagination.First onClick={() => fetchProjectList(1)} />
+                            <Pagination.Prev onClick={() => fetchProjectList(currentPage - 1)} />
+
+                            {renderPageNumbers()}
+
+                            <Pagination.Next onClick={() => fetchProjectList(currentPage + 1)} />
+                            <Pagination.Last onClick={() => fetchProjectList(totalPages)} />
+                        </Pagination>
                     </div>
                 </div>
             </div>
