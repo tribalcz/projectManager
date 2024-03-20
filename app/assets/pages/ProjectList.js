@@ -13,6 +13,7 @@ import {
     faPlus,
     faCaretDown,
     faCaretUp,
+    faArrowsRotate,
 } from "@fortawesome/free-solid-svg-icons";
 import SearchInput from "../components/forms/SearchInput";
 import '../css/loader.css';
@@ -22,9 +23,16 @@ function ProjectList() {
     const  [showDeleted, setShowDeleted] = useState(false) //state pro zobrazení smazaných projektů
     const  [isLoading, setIsLoading] = useState(false) //state pro zobrazení loaderu
     const  [searchQuery, setSearchQuery] = useState('') //state pro vyhledávání
+    const  [initialLoad, setInitialLoad] = useState(true)
 
     useEffect(() => {
-        fetchProjectList()
+            fetchProjectList()
+
+        const interval = setInterval(() => {
+            fetchProjectList();
+        }, 300000);
+
+        return () => clearInterval(interval);
     }, [showDeleted])
 
 
@@ -38,6 +46,7 @@ function ProjectList() {
             .then(function (response) {
                 setProjectList(response.data);
                 setIsLoading(false)
+                setInitialLoad(false)
             })
             .catch(function (error) {
                 console.log(error);
@@ -155,6 +164,13 @@ function ProjectList() {
                             disabled={isLoading}>
 
                             {isLoading ? <div className="running-dots"></div> : (showDeleted ? 'All Projects' : 'Archived Projects')}
+                        </button>
+                        <button
+                            onClick={fetchProjectList}
+                            className="btn btn-outline-danger rounded-0 mx-1"
+                            disabled={isLoading}>
+                            {initialLoad ? <div className="running-dots"></div> : (isLoading ? <FontAwesomeIcon icon={faArrowsRotate} className={"fa-spin"} /> : <FontAwesomeIcon icon={faArrowsRotate} />)}
+
                         </button>
                     </div>
                     <div className="card-body">
