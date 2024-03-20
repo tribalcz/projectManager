@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Project;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
 
 #[Route('/api', name: 'api_')]
 class ProjectController extends AbstractController
@@ -46,19 +48,32 @@ class ProjectController extends AbstractController
     public function index(EntityManagerInterface $em, Request $request): Response
     {
         $showDeleted = $request->query->getBoolean('showDeleted');
+        $page = $request->query->getInt('page');
+
+        $queryBuilder = $em->getRepository(Project::class)->createQueryBuilder('p');
 
         if ($showDeleted) {
-            $projects = $em
-                ->getRepository(Project::class)
-                ->createQueryBuilder('p')
-                ->where('p.deletedAt IS NOT NULL')
-                ->getQuery()
-                ->getResult();
+            $queryBuilder->where('p.deletedAt IS NOT NULL');
         } else {
-            $projects = $em
-                ->getRepository(Project::class)
-                ->findBy(['deletedAt' => null]);
+            $queryBuilder->where('p.deletedAt IS NULL');
         }
+
+        // Stránkování
+    $paginator = new Paginator($queryBuilder);
+
+    // Počet záznamů na stránku
+    $itemsPerPage = 10;
+
+    // Celkový počet položek
+    $totalItems = count($paginator);
+
+    // Výpočet počtu stránek
+    $totalPages = ceil($totalItems / $itemsPerPage);
+
+    // Nastavení prvního záznamu a maximálního počtu záznamů na stránku
+    $paginator->getQuery()->setFirstResult(($page - 1) * $itemsPerPage)->setMaxResults($itemsPerPage);
+
+    $projects = $paginator->getQuery()->getResult();
 
         $data = [];
 
@@ -73,7 +88,10 @@ class ProjectController extends AbstractController
             ];
         }
 
-        return $this->json($data);
+        return $this->json([
+            'data' => $data,
+            'totalPage' => $totalPages,
+        ]);
     }
 
     #[Route('/project/find', name: 'project_find', methods: ['GET'])]
