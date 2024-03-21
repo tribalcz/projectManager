@@ -2,10 +2,10 @@ import React from 'react';
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ProjectList from "../pages/ProjectList"
-import ProjectCreate from "../pages/ProjectCreate"
-import ProjectEdit from "../pages/ProjectEdit"
-import ProjectShow from "../pages/ProjectShow"
+import ProjectList from "../pages/ProjectManager/ProjectList"
+import ProjectCreate from "../pages/ProjectManager/ProjectCreate"
+import ProjectEdit from "../pages/ProjectManager/ProjectEdit"
+import ProjectShow from "../pages/ProjectManager/ProjectShow"
 import Layout from "../components/Layout"
 
 function Main() {
